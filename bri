@@ -1,0 +1,15 @@
+#!/bin/bash
+
+r=0 	# r = choice return code
+while [ $r -eq 0 ]
+do
+	choice=$(echo -e "Brighter\nDarker" | dmenu -i -p "Current brightness: $(brightness get h)%")
+	r=$?
+	case $choice in
+		Brighter)
+			sudo brightness inc
+			;;
+		Darker)
+			sudo brightness dec
+	esac
+done
