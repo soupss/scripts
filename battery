@@ -1,0 +1,12 @@
+#!/bin/bash
+
+bpath="/sys/class/power_supply/BAT0"
+
+case $1 in
+	status)
+		echo $(<$bpath/status)
+		;;
+	*)
+		echo $(<$bpath/capacity)
+		;;
+esac

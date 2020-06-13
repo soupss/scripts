@@ -1,0 +1,35 @@
+#!/bin/bash
+
+case $1 in
+	toggle)
+		amixer -qMD pulse sset Master toggle
+		;;
+	mute)
+		amixer -qMD pulse sset Master mute
+		;;
+	unmute)
+		amixer -qMD pulse sset Master unmute
+		;;
+	status)
+		amixer -D pulse get Master | grep 'Left:' | awk -F'[][]' '{ print $4 }'
+		;;
+	get)
+		amixer -D pulse get Master | grep 'Left:' | awk -F'[][]' '{ print $2 }'
+		;;
+	inc)
+		if [ $# -gt 1 ]
+		then
+			amixer -qMD pulse sset Master $2%+
+		else
+			amixer -qMD pulse sset Master 5%+
+		fi
+		;;
+	dec)
+		if [ $# -gt 1 ]
+		then
+			amixer -qMD pulse sset Master $2%-
+		else
+			amixer -qMD pulse sset Master 5%-
+		fi
+		;;
+esac

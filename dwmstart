@@ -1,0 +1,6 @@
+#!/bin/bash
+
+setxkbmap -option caps:escape &				# remap caps to escape
+feh --bg-scale ~/Pictures/carti-thefader2-wide.jpg & 	# set background
+dwmbar & 						# mydwmbar script for statusbar
+dwm			# run wm

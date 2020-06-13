@@ -1,0 +1,54 @@
+#!/bin/bash
+
+get_volume () {
+	if [ $(volume status) == "off" ]
+	then
+		echo "$(volume status)"
+	else
+		echo "$(volume get)"	
+	fi
+}
+
+icon () {
+	case $1 in
+		brightness)
+			# white sun
+			echo -e "\u2600"
+			;;
+		wifi)
+			echo ""
+			;;
+		volume)
+			echo "🔊"
+			;;
+		battery)
+			if [ $(battery status) == "Charging" ]
+			then
+				echo "🗲"
+			else
+				if [ $(battery get) -ge 20 ]
+				then
+					# full heart
+					echo -e "\u2665"
+				else
+					# empty heart
+					echo -e "\u2661"
+				fi
+			fi
+			;;
+		*)
+			echo ""
+			;;
+	esac
+}
+while :; do
+	sep="        "
+	brightness="$(icon brightness) $(brightness get h)%"
+	volume="$(icon volume) $(get_volume)"
+	battery="$(icon battery) $(battery get)%"
+	wifi="$(icon wifi)$(wifi)"
+	date="$(date '+%a %e %b %H:%M')"
+
+	xsetroot -name "$brightness$sep$volume$sep$battery$sep$wifi$sep$date"
+	sleep 1s
+done

@@ -1,0 +1,5 @@
+#!/bin/bash
+# used to clean before branching out for a patch
+make clean
+rm -f config.h
+git reset --hard origin/master

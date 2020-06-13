@@ -1,0 +1,48 @@
+#!/bin/bash
+
+bpath="/sys/class/backlight/intel_backlight/brightness" 	# brightness path
+maxb=$(</sys/class/backlight/intel_backlight/max_brightness) 	# max brightness
+minb=100							# min brightness
+step=$(( maxb/10 ))
+
+get_exact () {
+	echo $(<$bpath)
+}
+
+get_percentage () {
+	value=$(<$bpath)
+	percentage=$(( value*100/maxb ))
+	echo $percentage
+}
+
+# cases = arguments
+# nested case statements for >1 arguments
+case $1 in
+	get)
+		case $2 in
+			h) get_percentage;; # h = human readable
+			*) get_exact  ;;
+		esac
+		;;
+	set)
+		echo $2 > $bpath
+		;;
+	inc)
+		if [[ $(( $(get_exact)+step )) -gt $maxb ]]
+		then
+			echo $maxb > $bpath
+		else
+			echo $(( $(get_exact)+step )) > $bpath
+		fi
+		;;
+	dec)
+		if [[ $(( $(get_exact)-step )) -le $step ]]
+		then
+			echo $minb > $bpath
+		else
+			echo $(( $(get_exact)-step )) > $bpath
+		fi
+		;;
+	*)
+		echo "\"$1\"? available options: get, set, inc, dec"
+esac
